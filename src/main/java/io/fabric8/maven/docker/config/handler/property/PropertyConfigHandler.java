@@ -23,6 +23,7 @@ import org.apache.maven.project.MavenProject;
 
 import io.fabric8.maven.docker.config.handler.ExternalConfigHandler;
 import io.fabric8.maven.docker.util.EnvUtil;
+import org.codehaus.plexus.component.annotations.Component;
 
 import static io.fabric8.maven.docker.config.handler.property.ConfigKey.*;
 import static io.fabric8.maven.docker.util.EnvUtil.*;
@@ -31,8 +32,7 @@ import static io.fabric8.maven.docker.util.EnvUtil.*;
  * @author roland
  * @since 18/11/14
  */
-// Moved temporarily to resources/META-INF/plexus/components.xml because of https://github.com/codehaus-plexus/plexus-containers/issues/4
-// @Component(role = ExternalConfigHandler.class)
+@Component(role = ExternalConfigHandler.class, hint = "properties", instantiationStrategy = "per-lookup")
 public class PropertyConfigHandler implements ExternalConfigHandler {
 
     @Override

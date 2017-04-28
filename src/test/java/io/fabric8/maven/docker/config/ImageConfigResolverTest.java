@@ -40,7 +40,7 @@ public class ImageConfigResolverTest {
     @Before
     public void setUp() throws Exception {
         resolver = new ImageConfigResolver();
-        ReflectionUtils.setVariableValueInObject(resolver, "propertyConfigHandler", new TestHandler(3));
+        ReflectionUtils.setVariableValueInObject(resolver, "handlers", Collections.singletonList(new TestHandler(3)));
         resolver.initialize();
     }
 

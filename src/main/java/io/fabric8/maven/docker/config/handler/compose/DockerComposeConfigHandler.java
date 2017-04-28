@@ -12,6 +12,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenReaderFilter;
 import org.apache.maven.shared.filtering.MavenReaderFilterRequest;
+import org.codehaus.plexus.component.annotations.Component;
 import org.yaml.snakeyaml.Yaml;
 
 
@@ -20,8 +21,7 @@ import org.yaml.snakeyaml.Yaml;
  * to specify the docker images.
  */
 
-// Moved temporarily to resources/META-INF/plexus/components.xml because of https://github.com/codehaus-plexus/plexus-containers/issues/4
-// @Component(role = ExternalConfigHandler.class)
+@Component(role = ExternalConfigHandler.class, hint = "compose", instantiationStrategy = "per-lookup")
 public class DockerComposeConfigHandler implements ExternalConfigHandler {
 
     @Override

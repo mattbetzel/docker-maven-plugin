@@ -18,8 +18,6 @@ package io.fabric8.maven.docker.config.handler;/*
 import java.util.*;
 
 import io.fabric8.maven.docker.config.ImageConfiguration;
-import io.fabric8.maven.docker.config.handler.compose.DockerComposeConfigHandler;
-import io.fabric8.maven.docker.config.handler.property.PropertyConfigHandler;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
@@ -34,28 +32,20 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
  * @since 18/11/14
  */
 
-@Component(role = ImageConfigResolver.class, instantiationStrategy = "singleton")
+@Component(role = ImageConfigResolver.class, instantiationStrategy = "per-lookup")
 public class ImageConfigResolver implements Initializable {
 
     // Map type to handler
     private Map<String,ExternalConfigHandler> registry;
 
-    // No List<ExternalConfigHandler> injection possible currently with Plexus.
-    // Strangely, only the first element is injected in the list.
-    // So the elements are injected via scalar field injection and collected later.
-    // Very ugly, but I dont see any other solution until Plexus is fixed.
-
-    @Requirement(role = PropertyConfigHandler.class)
-    private ExternalConfigHandler propertyConfigHandler;
-
-    @Requirement(role = DockerComposeConfigHandler.class)
-    private ExternalConfigHandler dockerComposeConfigHandler;
+    @Requirement(role = ExternalConfigHandler.class)
+    private List<ExternalConfigHandler> handlers;
 
     @Override
     public void initialize() throws InitializationException {
         this.registry = new HashMap<>();
-        for (ExternalConfigHandler handler : new ExternalConfigHandler[] { propertyConfigHandler, dockerComposeConfigHandler }) {
-            if (handler != null) {
+        if (handlers != null) {
+            for (ExternalConfigHandler handler : handlers) {
                 registry.put(handler.getType(), handler);
             }
         }
